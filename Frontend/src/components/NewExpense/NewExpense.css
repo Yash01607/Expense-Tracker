@@ -37,3 +37,9 @@
 .new-expense button.alternative:active {
   background-color: #ddb3f8;
 }
+
+.new-expense-button-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+}

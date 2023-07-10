@@ -1,24 +1,29 @@
-import React, { useState } from "react";
+import React, { useState } from 'react';
 
-import ExpensesFilter from "../NewExpense/ExpensesFilter";
-import ExpensesList from "./ExpensesList";
-import Card from "../UI/Card";
-import ExpensesChart from "./ExpensesChart";
+import ExpensesFilter from '../NewExpense/ExpensesFilter';
+import ExpensesList from './ExpensesList';
+import Card from '../UI/Card';
+import ExpensesChart from './ExpensesChart';
 
-import "./Expenses.css";
+import './Expenses.css';
+import { useSelector } from 'react-redux';
 
-const Expenses = (props) => {
-  const [filteredYear, setFilteredYear] = useState("2021");
+const Expenses = () => {
+  const [filteredYear, setFilteredYear] = useState('2023');
+
+  const { salary } = useSelector((state) => state.salary);
+
+  const { expenses } = useSelector((state) => state.expenses);
 
   const filterChangeHandler = (selectedYear) => {
     setFilteredYear(selectedYear);
   };
 
-  const filteredExpenses = props.items.filter((expense) => {
-    return expense.date.getFullYear().toString() === filteredYear;
+  expenses?.map((expense) => (expense.date = new Date(expense.date)));
+
+  const filteredExpenses = expenses?.filter((expense) => {
+    return expense?.date?.getFullYear().toString() === filteredYear;
   });
-  console.log("In Expenses.js");
-    console.log(props.Salary);
 
   return (
     <div>
@@ -27,11 +32,11 @@ const Expenses = (props) => {
           selected={filteredYear}
           onChangeFilter={filterChangeHandler}
         />
-        <ExpensesChart expenses={filteredExpenses} salary={props.Salary}></ExpensesChart>
-        <ExpensesList
-          items={filteredExpenses}
-          onCancelledId={props.onDeletingExpense}
-        ></ExpensesList>
+        <ExpensesChart
+          expenses={filteredExpenses}
+          salary={salary}
+        ></ExpensesChart>
+        <ExpensesList items={filteredExpenses}></ExpensesList>
       </Card>
     </div>
   );

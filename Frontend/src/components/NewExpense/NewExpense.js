@@ -2,25 +2,20 @@ import React, { useState } from 'react';
 
 import './NewExpense.css';
 import ExpenseForm from './ExpenseForm';
-import Salary from './SalaryForm';
 
-const NewExpense = (props) => {
+import Salary from './SalaryForm';
+import { useSelector } from 'react-redux';
+
+const NewExpense = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [isUpdatingSalary, setisUpdatingSalary] = useState('');
+
+  const { salary } = useSelector((state) => state.salary);
 
   const startEditingHandler = () => {
     setIsEditing(true);
   };
   const stopEditingHandler = () => {
-    setIsEditing(false);
-  };
-
-  const saveExpneseDataHandler = (enteredExpenseData) => {
-    const expenseData = {
-      ...enteredExpenseData,
-      id: Math.random().toString(),
-    };
-    props.onAddExpense(expenseData);
     setIsEditing(false);
   };
 
@@ -38,21 +33,19 @@ const NewExpense = (props) => {
   return (
     <div className="new-expense">
       {!isEditing && !isUpdatingSalary && (
-        <div>
+        <div className="new-expense-button-container">
           <div>
             <button onClick={startEditingHandler}>Add New Expense</button>
           </div>
           <div>
-            <button onClick={startUpdatingSalaryHandler}>Add Salary</button>
+            <button onClick={startUpdatingSalaryHandler}>Update Salary</button>
+          </div>
+          <div>
+            <p>Current Salary: INR {salary}/- </p>
           </div>
         </div>
       )}
-      {isEditing && (
-        <ExpenseForm
-          onSaveExpenseData={saveExpneseDataHandler}
-          onCancel={stopEditingHandler}
-        />
-      )}
+      {isEditing && <ExpenseForm onCancel={stopEditingHandler} />}
       {isUpdatingSalary && (
         <Salary
           onCancel={stopUpdatingSalaryHandler}

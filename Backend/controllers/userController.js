@@ -35,8 +35,8 @@ export const signinController = async (req, res) => {
 };
 
 export const signupController = async (req, res) => {
-  const { firstName, lastName, email, password, confirmPassword } = req.body;
-
+  const { firstName, lastName, email, password, confirmPassword, salary } =
+    req.body;
   try {
     const existingUser = await User.findOne({ email });
 
@@ -56,6 +56,7 @@ export const signupController = async (req, res) => {
       email,
       password: hashedPassword,
       name: `${firstName} ${lastName}`,
+      salary: salary,
     });
 
     const token = jwt.sign(
@@ -71,9 +72,60 @@ export const signupController = async (req, res) => {
   }
 };
 
-export const salryController = (req, res) => {
-  const userId = req.userId;
+export const salryController = async (req, res) => {
+  const { _id, salary } = req.body;
 
   try {
-  } catch (error) {}
+    const existingUser = await User.findOneAndUpdate(
+      { _id: _id },
+      { salary: salary },
+      { new: true }
+    );
+    return res.status(200).json(existingUser?.salary);
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({ message: 'Something went wrong' });
+  }
+};
+
+export const addExpenses = async (req, res) => {
+  const { _id, expense } = req.body;
+
+  try {
+    const existingUser = await User.findOne({ _id: _id });
+
+    await existingUser?.expenses.push(expense);
+
+    await existingUser.save();
+
+    console.log(existingUser);
+
+    return res.status(200).json(existingUser?.expenses);
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({ message: 'Something went wrong' });
+  }
+};
+
+export const deleteExpense = async (req, res) => {
+  const { _id, expense: deleteExpense } = req.body;
+
+  try {
+    const existingUser = await User.findOne({ _id: _id });
+
+    const expenses = existingUser?.expenses;
+
+    const updatedExpenses = expenses.filter(
+      (expense) => expense.id !== deleteExpense.id
+    );
+
+    existingUser.expenses = updatedExpenses;
+
+    await existingUser.save();
+
+    return res.status(200).json(existingUser?.expenses);
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({ message: 'Something went wrong' });
+  }
 };

@@ -1,11 +1,15 @@
 import React, { useState } from 'react';
 
 import './ExpenseForm.css';
+import { useDispatch } from 'react-redux';
+import { addExpense } from '../../actions/authActions';
 
 const ExpenseForm = (props) => {
   const [enteredTitle, setEnteredTitle] = useState('');
   const [enteredAmount, setEnteredAmount] = useState('');
   const [enteredDate, setEnteredDate] = useState('');
+
+  const dispatch = useDispatch();
 
   const titleChangeHandler = (event) => {
     setEnteredTitle(event.target.value);
@@ -23,16 +27,19 @@ const ExpenseForm = (props) => {
     event.preventDefault();
 
     const expenseData = {
+      id: Math.random(),
       title: enteredTitle,
       amount: +enteredAmount,
       date: new Date(enteredDate),
     };
 
-    props.onSaveExpenseData(expenseData);
+    dispatch(addExpense(expenseData));
 
     setEnteredDate('');
     setEnteredTitle('');
     setEnteredAmount('');
+
+    props.onCancel();
   };
 
   return (
@@ -61,7 +68,7 @@ const ExpenseForm = (props) => {
           <input
             type="date"
             min="2019-01-01"
-            max="2022-12-31"
+            max="2025-12-31"
             value={enteredDate}
             onChange={dateChangeHandler}
           ></input>
@@ -69,7 +76,7 @@ const ExpenseForm = (props) => {
       </div>
       <div className="new-expense__actions">
         <button type="button" onClick={props.onCancel}>
-          Cancel
+          Go Back
         </button>
         <button type="submit">Add Expense</button>
       </div>

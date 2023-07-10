@@ -1,16 +1,23 @@
 import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
 
 import './Salary.css';
+import { updateSalary } from '../../actions/authActions';
 
 const Salary = (props) => {
   const [enteredSalary, setSalary] = useState('0');
+
+  const dispatch = useDispatch();
 
   const salaryChangeHandler = (event) => {
     setSalary(event.target.value);
   };
   const submitHandler = (event) => {
     event.preventDefault();
-    props.saveSalaryData(enteredSalary);
+
+    dispatch(updateSalary(enteredSalary));
+
+    props.onCancel();
   };
 
   return (
@@ -18,7 +25,7 @@ const Salary = (props) => {
       <form onSubmit={submitHandler}>
         <div className="new-expense__controls">
           <div className="new-expense__control">
-            <label htmlFor="salary">Enter your salary</label>
+            <label htmlFor="salary">Enter your Monthly salary</label>
             <input
               id="salary"
               type="number"
@@ -27,7 +34,8 @@ const Salary = (props) => {
           </div>
         </div>
         <div className="new-expense__actions">
-          <button type="submit">Enter your Salary</button>
+          <button onClick={() => props.onCancel()}>Go Back</button>
+          <button type="submit">Update</button>
         </div>
       </form>
     </div>
