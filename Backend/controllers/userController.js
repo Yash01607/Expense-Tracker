@@ -98,8 +98,6 @@ export const addExpenses = async (req, res) => {
 
     await existingUser.save();
 
-    console.log(existingUser);
-
     return res.status(200).json(existingUser?.expenses);
   } catch (error) {
     console.log(error);

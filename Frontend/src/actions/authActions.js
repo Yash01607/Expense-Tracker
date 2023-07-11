@@ -44,7 +44,6 @@ export const jwtSignUp = (userData, navigate) => async (dispatch) => {
 
     const { data } = await api.signUp(userData);
     dispatch({ type: JWT_AUTH_SUCCESS, payload: data });
-    dispatch({ type: UPDATE_SALARY_SUCCESS, payload: data?.result?.salary });
 
     navigate('/');
     window.location.reload();
