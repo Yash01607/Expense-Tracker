@@ -1,7 +1,8 @@
 import axios from 'axios';
-import env from 'react-dotenv';
 
-const API = axios.create({ baseURL: env?.SERVER_URL });
+const API = axios.create({
+  baseURL: 'https://expense-tracker-t01y.onrender.com/api',
+});
 
 API.interceptors.request.use((req) => {
   if (localStorage.getItem('profile')) {
