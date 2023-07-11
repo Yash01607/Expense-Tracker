@@ -31,9 +31,9 @@ app.use(
 app.use('/api/user', userRouter);
 
 const __dirname = path.resolve();
-app.use(express.static(path.join(__dirname, '/frontend/build')));
+app.use(express.static(path.join(__dirname, '/Frontend/build')));
 app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, '/frontend/build/index.html'));
+  res.sendFile(path.join(__dirname, '/Frontend/build/index.html'));
 });
 
 const httpServer = http.Server(app);
